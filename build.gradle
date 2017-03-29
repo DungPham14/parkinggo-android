@@ -1,0 +1,48 @@
+// Top-level build file where you can add configuration options common to all sub-projects/modules.
+
+buildscript {
+    repositories {
+        jcenter()
+    }
+    dependencies {
+        classpath 'com.android.tools.build:gradle:2.3.0'
+
+        // NOTE: Do not place your application dependencies here; they belong
+        // in the individual module build.gradle files
+    }
+}
+
+allprojects {
+    repositories {
+        jcenter()
+    }
+}
+
+task clean(type: Delete) {
+    delete rootProject.buildDir
+}
+
+
+ext {
+    // dependencies versions
+    supportLibraryVersion = '25.3.0'
+    playServicesMapsVersion = '9.6.1'
+    sdpAndroidVersion = '1.0.3'
+    butterKnifeVersion ='8.2.1'
+    eventbusVersion = '3.0.0'
+    daggerVersion='2.5'
+    facebookStethoVersion='1.4.1'
+    stethoRealmVersion='2.0.0'
+    gsonVersion='2.6.2'
+    calligraphyVersion = '2.2.0'
+    circleimageviewVersion = '2.1.0'
+    facebookVersion = '4.1.0'
+    datetimepickerVersion = '2.0.0'
+    glideVersion = '3.6.1'
+    retrofitVersion='2.1.0'
+    okhttpVersion='3.6.0'
+    rxbindingVersion='0.4.0'
+    rxandroidVersion='1.2.1'
+    rxjavaVersion='1.1.6'
+    streamVersion='1.1.6'
+}

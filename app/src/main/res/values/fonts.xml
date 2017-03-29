@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<resources>
+    <string name="kanitLight" translatable="false">fonts/Kanit-Light.ttf</string>
+    <string name="kanitMedium" translatable="false">fonts/Kanit-Medium.ttf</string>
+    <string name="kanitRegular" translatable="false">fonts/Kanit-Regular.ttf</string>
+
+</resources>

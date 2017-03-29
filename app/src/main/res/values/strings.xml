@@ -1,9 +1,9 @@
 <resources>
     <string name="app_name">Parking GO</string>
 
-    <!-- Strings related to login -->
+    <!-- Strings related to sign in -->
     <string name="prompt_email">Email</string>
-    <string name="prompt_password">Password (optional)</string>
+    <string name="prompt_password">Password</string>
 
     <string name="permission_rationale">"Contacts permissions are needed for providing email
         completions."
@@ -29,5 +29,6 @@
     <string name="error_field_required">This field is required</string>
     <string name="error_incorrect_email_password">The email address or password are incorrect!</string>
     <string name="error_not_connect_to_internet">You are not connect to internet</string>
+    <string name="title_activity_main">Map</string>
 
 </resources>

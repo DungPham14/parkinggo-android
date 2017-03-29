@@ -193,6 +193,9 @@ dependencies {
     compile "io.reactivex:rxjava:$rootProject.rxjavaVersion"
     compile "com.annimon:stream:$rootProject.streamVersion"
 
+    compile 'com.android.support.constraint:constraint-layout:1.0.2'
+    compile 'com.google.android.gms:play-services-maps:10.2.0'
+    compile 'com.android.support:appcompat-v7:25.3.0'
     testCompile 'junit:junit:4.12'
     provided 'javax.annotation:jsr250-api:1.0'
 }

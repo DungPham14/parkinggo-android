@@ -1,5 +1,5 @@
 # android-boilerplate
-Evolable-Asia Android App
+Parking GO Android App
 
 ```
 Code base for every Regina's android projects

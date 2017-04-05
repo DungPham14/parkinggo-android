@@ -5,9 +5,9 @@ import android.os.Bundle;
 import javax.inject.Inject;
 
 import parkinggo.com.R;
-import parkinggo.com.ui.base.BaseMVPDialogActivity;
+import parkinggo.com.ui.base.BaseActivityWithDailog;
 
-public class SignUpActivity extends BaseMVPDialogActivity implements SignUpMvpView {
+public class SignUpActivity extends BaseActivityWithDailog implements SignUpMvpView {
 
     @Inject
     SignUpPresenter presenter;

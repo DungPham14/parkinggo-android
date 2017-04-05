@@ -9,4 +9,15 @@ package parkinggo.com.ui.authentication.sign_in;
 import parkinggo.com.ui.base.BaseScreenMvpView;
 
 public interface SignInMvpView extends BaseScreenMvpView {
+
+    void signInByFacebook();
+
+    void signInByGoogle();
+
+    void navigateMainScreen();
+
+    void navigateSignUp();
+
+    void navigateForgotPassword();
+
 }

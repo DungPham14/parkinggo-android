@@ -1,48 +1,92 @@
 package parkinggo.com.ui.main;
 
-import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
+import android.support.design.widget.NavigationView;
+import android.support.v4.view.GravityCompat;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.widget.Toolbar;
+import android.view.View;
 
-import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
-import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.MarkerOptions;
 
+import javax.inject.Inject;
+
+import butterknife.BindView;
 import parkinggo.com.R;
+import parkinggo.com.ui.base.BaseActivityWithDailog;
+import parkinggo.com.ui.main.fragment.HomeFragment;
+import parkinggo.com.ui.main.interfaces.OnDrawerLayoutListener;
+import parkinggo.com.util.FragmentUtil;
 
-public class MainActivity extends FragmentActivity implements OnMapReadyCallback {
+public class MainActivity extends BaseActivityWithDailog implements MainMvpView, OnDrawerLayoutListener {
 
-    private GoogleMap mMap;
+
+    @BindView(R.id.toolbar)
+    Toolbar toolbar;
+    @BindView(R.id.nav_view)
+    NavigationView navigationView;
+    @BindView(R.id.drawer_layout)
+    DrawerLayout drawer;
+
+    @Inject
+    MainPresenter presenter;
+    private boolean isHome = true;
+
+    @Override
+    protected boolean bindView() {
+        return true;
+    }
+
+    @Override
+    protected int addContextView() {
+        return R.layout.activity_main;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-        // Obtain the SupportMapFragment and get notified when the map is ready to be used.
-        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
-                .findFragmentById(R.id.map);
-        mapFragment.getMapAsync(this);
+        getActivityComponent().inject(this);
+        presenter.initialView(this);
+        initial();
+        addHomeFragment();
     }
 
+    public void initial() {
+        setSupportActionBar(toolbar);
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        drawer.setDrawerListener(toggle);
+        toggle.syncState();
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
+        navigationView.getMenu().getItem(0).setChecked(true);
+        navigationView.setNavigationItemSelectedListener(presenter);
+    }
 
-    /**
-     * Manipulates the map once available.
-     * This callback is triggered when the map is ready to be used.
-     * This is where we can add markers or lines, add listeners or move the camera. In this case,
-     * we just add a marker near Sydney, Australia.
-     * If Google Play services is not installed on the device, the user will be prompted to install
-     * it inside the SupportMapFragment. This method will only be triggered once the user has
-     * installed Google Play services and returned to the app.
-     */
     @Override
-    public void onMapReady(GoogleMap googleMap) {
-        mMap = googleMap;
+    public void OnItemMenuClick() {
+        drawer.closeDrawer(GravityCompat.START);
+        isHome = FragmentUtil.getCurrentFragment(this, R.id.frame_content) instanceof HomeFragment;
+    }
 
-        // Add a marker in Sydney and move the camera
-        LatLng sydney = new LatLng(-34, 151);
-        mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
+    @Override
+    public void navigateHome() {
+        addHomeFragment();
+    }
+
+    private void addHomeFragment() {
+        toolbar.setVisibility(View.GONE);
+        FragmentUtil.replaceFragmentWithoutBackStack(getSupportFragmentManager(),
+                HomeFragment.getInstance(), R.id.frame_content);
+    }
+
+    @Override
+    public void onMenuClickListener() {
+        drawer.openDrawer(GravityCompat.START);
+    }
+
+    public void displayToolBar() {
+        toolbar.setVisibility(!isHome ? View.VISIBLE : View.GONE);
     }
 }

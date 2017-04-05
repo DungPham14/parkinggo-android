@@ -18,9 +18,11 @@ import parkinggo.com.constants.Constants;
 import parkinggo.com.injection.components.ApplicationComponent;
 import parkinggo.com.injection.components.DaggerApplicationComponent;
 import parkinggo.com.injection.modules.ApplicationModule;
+import parkinggo.com.util.font.FontUtils;
 
 
 public class ParkingGoApplication extends Application {
+
     private final Object lock = new Object();
     private ApplicationComponent mApplicationComponent;
 
@@ -31,6 +33,7 @@ public class ParkingGoApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
+        FontUtils.initFont(this);
         Realm.init(this);
         RealmConfiguration realmConfiguration = new RealmConfiguration.Builder()
                 .schemaVersion(Constants.DATABASE_VERSION)

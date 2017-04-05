@@ -6,7 +6,7 @@ import com.google.gson.annotations.SerializedName;
 import io.realm.RealmList;
 import io.realm.RealmObject;
 
-public class GlobalConfig extends RealmObject {
+public class GlobalConf extends RealmObject {
     @SerializedName("userConf")
     @Expose
     private RealmList<UserConf> userConfs;

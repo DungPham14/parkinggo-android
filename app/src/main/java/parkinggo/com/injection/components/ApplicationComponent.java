@@ -12,6 +12,7 @@ import parkinggo.com.data.DataManager;
 import parkinggo.com.injection.ApplicationContext;
 import parkinggo.com.injection.modules.ApplicationModule;
 import parkinggo.com.ui.base.BaseActivity;
+import parkinggo.com.ui.base.BaseFragment;
 import retrofit2.Retrofit;
 
 @Singleton
@@ -32,4 +33,6 @@ public interface ApplicationComponent {
     Toast toast();
 
     void inject(BaseActivity baseActivity);
+
+    void inject(BaseFragment fragment);
 }

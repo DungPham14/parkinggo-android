@@ -19,10 +19,12 @@ import io.realm.annotations.Ignore;
 import okhttp3.MultipartBody;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
+import okhttp3.RequestBody;
 import okhttp3.logging.HttpLoggingInterceptor;
 import parkinggo.com.BuildConfig;
 import parkinggo.com.constants.Constants;
-import parkinggo.com.data.model.GlobalConfig;
+import parkinggo.com.data.convert.WrapperDeserializer;
+import parkinggo.com.data.model.GlobalConf;
 import parkinggo.com.data.model.LoginResponse;
 import parkinggo.com.data.model.SignUpResponse;
 import retrofit2.Retrofit;
@@ -32,6 +34,7 @@ import retrofit2.http.Field;
 import retrofit2.http.FieldMap;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
+import retrofit2.http.Multipart;
 import retrofit2.http.POST;
 import retrofit2.http.Part;
 import rx.Observable;
@@ -39,15 +42,15 @@ import rx.Observable;
 public interface NetworkService {
 
     @GET("_constants")
-    Observable<GlobalConfig> getConfig();
+    Observable<GlobalConf> getConfig();
 
     @FormUrlEncoded
     @POST("user/register")
     Observable<SignUpResponse> signUp(@FieldMap Map<String, String> signUpField, @Part MultipartBody.Part avatar);
 
-    @FormUrlEncoded
-    @POST("user/login")
-    Observable<LoginResponse> login(@Field("username") String username, @Field("password") String password);
+    @Multipart
+    @POST("login")
+    Observable<LoginResponse> signIn(@Part("username") RequestBody username, @Part("password") RequestBody password);
 
     class Creator {
         public static Retrofit newRetrofitInstance() {
@@ -85,7 +88,7 @@ public interface NetworkService {
                         public boolean shouldSkipClass(Class<?> clazz) {
                             return false;
                         }
-                    })
+                    }).registerTypeAdapter(LoginResponse.class, new WrapperDeserializer<>(internalGson))
                     .setDateFormat("yyyy-MM-dd HH:mm:ss")
                     .create();
 

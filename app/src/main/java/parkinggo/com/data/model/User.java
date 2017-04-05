@@ -4,6 +4,7 @@ import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 import io.realm.RealmObject;
+import io.realm.annotations.Ignore;
 import io.realm.annotations.PrimaryKey;
 
 public class User extends RealmObject {
@@ -12,10 +13,14 @@ public class User extends RealmObject {
     @PrimaryKey
     @SerializedName("id")
     @Expose
-    long id;
+    int id;
     @SerializedName("username")
     @Expose
     String userName;
+    @Ignore
+    @SerializedName("password")
+    @Expose
+    String password;
     @SerializedName("email")
     @Expose
     String email;
@@ -39,13 +44,16 @@ public class User extends RealmObject {
     int socialType;
     @SerializedName("social_id")
     @Expose
-    int socialId;
+    String socialId;
+    @SerializedName("avatar")
+    @Expose
+    String avatar;
 
     public long getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(int id) {
         this.id = id;
     }
 
@@ -55,6 +63,14 @@ public class User extends RealmObject {
 
     public void setUserName(String userName) {
         this.userName = userName;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     public String getEmail() {
@@ -113,11 +129,19 @@ public class User extends RealmObject {
         this.socialType = socialType;
     }
 
-    public int getSocialId() {
+    public String getSocialId() {
         return socialId;
     }
 
-    public void setSocialId(int socialId) {
+    public void setSocialId(String socialId) {
         this.socialId = socialId;
+    }
+
+    public String getAvatar() {
+        return avatar;
+    }
+
+    public void setAvatar(String avatar) {
+        this.avatar = avatar;
     }
 }

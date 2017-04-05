@@ -1,28 +1,35 @@
+/*
+ * ******************************************************************************
+ *  Copyright Ⓒ 2017. All rights reserved
+ *  Author HoanDC. Create on 05/04/2017.
+ * ******************************************************************************
+ */
 package parkinggo.com.ui.base;
+
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.annotation.StringRes;
+import android.view.View;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 
 import parkinggo.com.R;
 import parkinggo.com.util.Utils;
 
-
-public abstract class BaseMVPDialogActivity extends BaseActivity implements BaseScreenMvpView {
+public abstract class BaseFragmentWithDialog extends BaseFragment implements BaseScreenMvpView {
     protected MaterialDialog progressDialog, alertDialog;
 
     @Override
-    protected void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
         createProgressDialog();
         createAlertDialog();
     }
 
     @Override
     public void createProgressDialog() {
-        progressDialog = new MaterialDialog.Builder(this)
+        progressDialog = new MaterialDialog.Builder(getContext())
                 .content(R.string.waiting_message)
                 .progress(true, 0)
                 .build();
@@ -44,7 +51,7 @@ public abstract class BaseMVPDialogActivity extends BaseActivity implements Base
 
     @Override
     public void createAlertDialog() {
-        alertDialog = new MaterialDialog.Builder(this)
+        alertDialog = new MaterialDialog.Builder(getContext())
                 .title(R.string.title_dialog)
                 .positiveText(R.string.action_ok)
                 .build();
@@ -79,11 +86,11 @@ public abstract class BaseMVPDialogActivity extends BaseActivity implements Base
 
     @Override
     public boolean isConnectToInternet() {
-        return Utils.isConnectivityAvailable(this);
+        return Utils.isConnectivityAvailable(getActivity());
     }
 
     @Override
-    protected void onDestroy() {
+    public void onDestroyView() {
         if (progressDialog != null && progressDialog.isShowing()) {
             progressDialog.dismiss();
         }
@@ -91,6 +98,6 @@ public abstract class BaseMVPDialogActivity extends BaseActivity implements Base
         if (alertDialog != null && alertDialog.isShowing()) {
             alertDialog.dismiss();
         }
-        super.onDestroy();
+        super.onDestroyView();
     }
 }

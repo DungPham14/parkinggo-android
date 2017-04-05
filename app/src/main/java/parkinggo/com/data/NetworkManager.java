@@ -11,7 +11,8 @@ import java.util.Map;
 import javax.inject.Inject;
 
 import okhttp3.MultipartBody;
-import parkinggo.com.data.model.GlobalConfig;
+import okhttp3.RequestBody;
+import parkinggo.com.data.model.GlobalConf;
 import parkinggo.com.data.model.LoginResponse;
 import parkinggo.com.data.model.SignUpResponse;
 import parkinggo.com.data.networking.NetworkService;
@@ -27,8 +28,7 @@ public class NetworkManager {
         this.networkService = networkService;
     }
 
-
-    public Observable<GlobalConfig> getConfig() {
+    public Observable<GlobalConf> getConfig() {
         return networkService.getConfig();
     }
 
@@ -37,7 +37,8 @@ public class NetworkManager {
         return networkService.signUp(signUpField, avatar);
     }
 
-    public Observable<LoginResponse> login(String userName, String password) {
-        return networkService.login(userName, password);
+    public Observable<LoginResponse> signIn(RequestBody userName, RequestBody password) {
+        return networkService.signIn(userName, password);
     }
+
 }

@@ -9,4 +9,9 @@ package parkinggo.com.ui.main;
 import parkinggo.com.ui.base.BaseScreenMvpView;
 
 public interface MainMvpView extends BaseScreenMvpView {
+
+    void OnItemMenuClick();
+
+    void navigateHome();
+
 }

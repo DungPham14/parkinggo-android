@@ -12,10 +12,8 @@
 # If your project uses WebView with JS, uncomment the following
 # and specify the fully qualified class name to the JavaScript interface
 # class:
--dontobfuscate
--keepclassmembers class fqcn.of.javascript.interface.for.webview {
-   public *;
-}
+-keep class com.google.android.gms.ads.**
+
 # eventbus
 -keepattributes *Annotation*
 -keepclassmembers class ** {

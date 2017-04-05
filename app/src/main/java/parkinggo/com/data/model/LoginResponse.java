@@ -5,11 +5,26 @@ import com.google.gson.annotations.SerializedName;
 
 public class LoginResponse {
 
-    @SerializedName("token")
-    @Expose
-    String token;
     @SerializedName("message")
     @Expose
     String message;
+    @SerializedName("data")
+    @Expose
+    AuthenData data;
 
+    public String getMessage() {
+        return message;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
+    }
+
+    public AuthenData getData() {
+        return data;
+    }
+
+    public void setData(AuthenData data) {
+        this.data = data;
+    }
 }

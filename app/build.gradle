@@ -1,9 +1,3 @@
-/*
- * ******************************************************************************
- *  Copyright Ⓒ 2016. Dotohsoft.com. All right reversed
- *  Author TrinhQuan. Create on 2016/8/21
- * ******************************************************************************
- */
 buildscript {
     repositories {
         jcenter()
@@ -43,12 +37,13 @@ android {
     buildToolsVersion project.ANDROID_BUILD_TOOLS_VERSION
 
     defaultConfig {
-        applicationId "asia.jpoint.merchant"
+        applicationId "parkinggo.com"
         minSdkVersion Integer.parseInt(project.ANDROID_BUILD_MIN_SDK_VERSION)
         targetSdkVersion Integer.parseInt(project.ANDROID_BUILD_TARGET_SDK_VERSION)
         versionCode versionMajor * 1000 + versionMinor * 100 + versionPatch
         versionName String.format("%s.%s.%s", versionMajor, versionMinor, versionPatch)
         vectorDrawables.useSupportLibrary = true
+        multiDexEnabled = true
     }
 
     signingConfigs {
@@ -109,7 +104,7 @@ android {
         targetCompatibility JavaVersion.VERSION_1_8
     }
     packagingOptions {
-        exclude 'META-INF/services/javax.annotation.processing.Processor'
+        exclude 'META-INF/serviNoSuchFieldExceptionces/javax.annotation.processing.Processor'
         exclude 'META-INF/DEPENDENCIES'
         exclude 'META-INF/LICENSE'
         exclude 'META-INF/LICENSE.txt'
@@ -126,7 +121,6 @@ dependencies {
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
-
     // support libraries
     compile "com.android.support:appcompat-v7:$rootProject.supportLibraryVersion"
     compile "com.android.support:design:$rootProject.supportLibraryVersion"
@@ -194,8 +188,6 @@ dependencies {
     compile "com.annimon:stream:$rootProject.streamVersion"
 
     compile 'com.android.support.constraint:constraint-layout:1.0.2'
-    compile 'com.google.android.gms:play-services-maps:10.2.0'
-    compile 'com.android.support:appcompat-v7:25.3.0'
     testCompile 'junit:junit:4.12'
     provided 'javax.annotation:jsr250-api:1.0'
 }

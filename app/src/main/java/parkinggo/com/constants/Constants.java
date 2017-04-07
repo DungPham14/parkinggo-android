@@ -19,9 +19,4 @@ public interface Constants {
     // message default
     String FAIL_CONNECT_MESSAGE = "Fail to connect to server";
 
-    // Extra key
-    String EXTRA_BARCODE_KEY = "barcode_key";
-
-    // start activity request code
-    int SCANNER_REQUEST_CODE = 1;
 }

@@ -12,10 +12,8 @@
 # If your project uses WebView with JS, uncomment the following
 # and specify the fully qualified class name to the JavaScript interface
 # class:
--dontobfuscate
--keepclassmembers class fqcn.of.javascript.interface.for.webview {
-   public *;
-}
+-keep class com.google.android.gms.ads.**
+
 # eventbus
 -keepattributes *Annotation*
 -keepclassmembers class ** {
@@ -28,6 +26,20 @@
 -keep class retrofit2.** { *; }
 -keepattributes Signature
 -keepattributes Exceptions
+#rx
+-dontwarn sun.misc.**
+-keepclassmembers class rx.internal.util.unsafe.*ArrayQueue*Field* {
+   long producerIndex;
+   long consumerIndex;
+}
+-keepclassmembers class rx.internal.util.unsafe.BaseLinkedQueueProducerNodeRef {
+    rx.internal.util.atomic.LinkedQueueNode producerNode;
+}
+-keepclassmembers class rx.internal.util.unsafe.BaseLinkedQueueConsumerNodeRef {
+    rx.internal.util.atomic.LinkedQueueNode consumerNode;
+}
+
+-dontnote rx.internal.util.PlatformDependent
 
 # jackson
 # if you dont use jackson, you can simply using -dontwarn line for jackson below

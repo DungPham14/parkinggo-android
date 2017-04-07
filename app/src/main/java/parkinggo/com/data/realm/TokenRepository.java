@@ -7,7 +7,9 @@
 package parkinggo.com.data.realm;
 
 import io.realm.Realm;
+import io.realm.RealmList;
 import io.realm.RealmQuery;
+import io.realm.RealmResults;
 import parkinggo.com.data.model.Token;
 
 public class TokenRepository extends Repository {
@@ -25,7 +27,10 @@ public class TokenRepository extends Repository {
         Realm realm = getRealmInstance();
         realm.beginTransaction();
         try {
-            token = getTokenQuery().findAll().first();
+            RealmResults<Token> tokens = getTokenQuery().findAll();
+            if (tokens.size() > 0) {
+                token = getTokenQuery().findAll().first();
+            }
             realm.commitTransaction();
         } catch (Exception e) {
             realm.cancelTransaction();

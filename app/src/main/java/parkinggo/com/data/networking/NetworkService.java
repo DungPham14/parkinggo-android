@@ -37,6 +37,7 @@ import retrofit2.http.GET;
 import retrofit2.http.Multipart;
 import retrofit2.http.POST;
 import retrofit2.http.Part;
+import retrofit2.http.PartMap;
 import rx.Observable;
 
 public interface NetworkService {
@@ -46,11 +47,15 @@ public interface NetworkService {
 
     @FormUrlEncoded
     @POST("user/register")
-    Observable<SignUpResponse> signUp(@FieldMap Map<String, String> signUpField, @Part MultipartBody.Part avatar);
+    Observable<SignUpResponse> signUp(@FieldMap Map<String, RequestBody> signUpField, @PartMap Map<String, RequestBody> avatar);
 
     @Multipart
     @POST("login")
     Observable<LoginResponse> signIn(@Part("username") RequestBody username, @Part("password") RequestBody password);
+
+    @Multipart
+    @POST("")
+    Observable<SignUpResponse> signUpBySocial(@PartMap Map<String, RequestBody> params);
 
     class Creator {
         public static Retrofit newRetrofitInstance() {

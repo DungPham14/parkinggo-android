@@ -10,7 +10,10 @@ import android.util.Log;
 
 import javax.inject.Inject;
 
+import parkinggo.com.R;
+import parkinggo.com.constants.Constants;
 import parkinggo.com.data.DataManager;
+import parkinggo.com.data.model.ApiError;
 import parkinggo.com.data.model.Token;
 import parkinggo.com.data.model.User;
 import parkinggo.com.ui.base.BasePresenter;
@@ -56,7 +59,6 @@ public class SignInPresenter extends BasePresenter<SignInMvpView> {
             getMvpView().dismissProgressDialog();
         }).subscribe(response -> {
             if (response.getData() != null) {
-                Log.e("subscribe", "token="+response.getData().getToken());
                 if (!StringHelper.isEmpty(response.getData().getToken())) {
                     mDataManager.getDatabaseManager().saveToken(new Token(response.getData().getToken()));
                 }
@@ -68,6 +70,12 @@ public class SignInPresenter extends BasePresenter<SignInMvpView> {
         }, throwable -> {
             throwable.printStackTrace();
             getMvpView().dismissProgressDialog();
+            ApiError apiError = getErrorFromHttp(throwable);
+            if (apiError.getCode() == Constants.HTTP_AUTHENTICATION) {
+                getMvpView().showAlert(R.string.error_incorrect_email_password);
+            } else {
+                getMvpView().showAlert(apiError.getMessage());
+            }
         });
 
     }
@@ -86,11 +94,29 @@ public class SignInPresenter extends BasePresenter<SignInMvpView> {
     }
 
     public void signUpByFaceBook() {
-
+        getMvpView().signInByFacebook();
     }
 
     public void signUpByGoogle() {
-
+        getMvpView().signInByGoogle();
     }
 
+    public void signUpSocial(User user) {
+        mDataManager.getNetworkManager().signUpBySocial(user)
+                .subscribeOn(Schedulers.newThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .doOnSubscribe(() -> {
+                    getMvpView().showProgressDialog();
+                }).doOnCompleted(() -> {
+            getMvpView().dismissProgressDialog();
+        }).subscribe(response -> {
+
+            getMvpView().navigateMainScreen();
+        }, throwable -> {
+            throwable.printStackTrace();
+            getMvpView().dismissProgressDialog();
+            ApiError apiError = getErrorFromHttp(throwable);
+            getMvpView().showAlert(apiError.getMessage());
+        });
+    }
 }

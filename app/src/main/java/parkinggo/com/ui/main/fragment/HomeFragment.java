@@ -22,6 +22,7 @@ import android.os.Looper;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v13.app.ActivityCompat;
+import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
@@ -264,6 +265,7 @@ public class HomeFragment extends BaseFragmentWithDialog implements HomeMvpView,
             requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
                     LOCATION_PERMISSION_REQUEST_CODE);
         } else {
+            Log.e("googleMap","googleMap");
             if (googleMap != null) {
                 // Access to the location has been granted to the app.
                 googleMap.setMyLocationEnabled(true);
@@ -287,7 +289,7 @@ public class HomeFragment extends BaseFragmentWithDialog implements HomeMvpView,
     }
 
     private void showCurrentLocation(){
-
+        Log.e("showCurrentLocation","showCurrentLocation");
         // moving camera and adding parking list based on current location of device.
         Handler handler = new Handler(Looper.getMainLooper());
         handler.post(new Runnable() {
@@ -320,6 +322,7 @@ public class HomeFragment extends BaseFragmentWithDialog implements HomeMvpView,
             case LocationSettingsStatusCodes.SUCCESS:
                 // All location settings are satisfied. The client can
                 // initialize location requests here.
+                Log.e("onResult","onResult");
                 enableMyLocation();
                 break;
             case LocationSettingsStatusCodes.RESOLUTION_REQUIRED:

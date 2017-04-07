@@ -66,7 +66,7 @@ android {
         release {
             minifyEnabled true
             zipAlignEnabled true
-            debuggable false
+            debuggable true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             signingConfig signingConfigs.release
         }
@@ -113,6 +113,7 @@ android {
         exclude 'META-INF/NOTICE.txt'
         exclude 'META-INF/notice.txt'
         exclude 'META-INF/ASL2.0'
+        exclude 'META-INF/rxjava.properties'
     }
 }
 
@@ -135,10 +136,13 @@ dependencies {
     // SDP - a scalable size unit
     compile "com.intuit.sdp:sdp-android:$rootProject.ext.sdpAndroidVersion"
 
+    // Google API
+    compile "com.google.android.gms:play-services-auth:$rootProject.ext.playServices"
+    compile "com.google.android.gms:play-services:$rootProject.ext.playServices"
     // Map
-    compile "com.google.android.gms:play-services-maps:$rootProject.ext.playServicesMapsVersion"
-    compile "com.google.android.gms:play-services-location:$rootProject.ext.playServicesMapsVersion"
-    compile "com.google.android.gms:play-services-places:$rootProject.ext.playServicesMapsVersion"
+    compile "com.google.android.gms:play-services-maps:$rootProject.ext.playServices"
+    compile "com.google.android.gms:play-services-location:$rootProject.ext.playServices"
+    compile "com.google.android.gms:play-services-places:$rootProject.ext.playServices"
 
     //butter knife
     compile "com.jakewharton:butterknife:$rootProject.butterKnifeVersion"
@@ -155,7 +159,6 @@ dependencies {
 
     //Facebook sdk
     compile "com.facebook.android:facebook-android-sdk:$rootProject.ext.facebookVersion"
-    compile "com.google.android.gms:play-services-auth:$rootProject.ext.playServicesMapsVersion"
 
     // DateTime
     compile "com.wdullaer:materialdatetimepicker:$rootProject.ext.datetimepickerVersion"
@@ -183,8 +186,8 @@ dependencies {
 
     //reactive
     compile "com.jakewharton.rxbinding:rxbinding:$rootProject.rxbindingVersion"
-    compile "io.reactivex:rxandroid:$rootProject.rxandroidVersion"
-    compile "io.reactivex:rxjava:$rootProject.rxjavaVersion"
+    compile "io.reactivex.rxjava2:rxandroid:$rootProject.rxandroidVersion"
+    compile "io.reactivex.rxjava2:rxjava:$rootProject.rxjavaVersion"
     compile "com.annimon:stream:$rootProject.streamVersion"
 
     compile 'com.android.support.constraint:constraint-layout:1.0.2'

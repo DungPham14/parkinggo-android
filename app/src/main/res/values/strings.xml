@@ -20,7 +20,8 @@
     <string name="action_logout">Log out</string>
     <string name="action_forgot_password">Forgot Password?</string>
     <string name="action_sign_up">New here? Sign Up</string>
-    <string name="action_sign_in_google">Login with Google</string>
+    <string name="action_google_plus">Google +</string>
+    <string name="action_android_app">Android</string>
     <string name="action_skip">Skip</string>
     <string name="action_view_all">View all ></string>
 

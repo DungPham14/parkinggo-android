@@ -34,6 +34,7 @@ import butterknife.BindView;
 import butterknife.OnClick;
 import parkinggo.com.R;
 import parkinggo.com.data.model.User;
+import parkinggo.com.ui.authentication.forgot_password.ForgotPasswordActivity;
 import parkinggo.com.ui.authentication.sign_up.SignUpActivity;
 import parkinggo.com.ui.base.BaseActivityWithDailog;
 import parkinggo.com.ui.main.MainActivity;
@@ -208,16 +209,17 @@ public class SignInActivity extends BaseActivityWithDailog implements SignInMvpV
     @Override
     public void navigateMainScreen() {
         navigateToActivity(MainActivity.class);
+        finish();
     }
 
     @Override
     public void navigateSignUp() {
-        navigateToActivity(SignUpActivity.class);
+        navigateToActivitySlide(SignUpActivity.class);
     }
 
     @Override
     public void navigateForgotPassword() {
-
+        navigateToActivitySlide(ForgotPasswordActivity.class);
     }
 
     @Override

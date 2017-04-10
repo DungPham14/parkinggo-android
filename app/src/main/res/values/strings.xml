@@ -5,6 +5,9 @@
     <!-- Strings related to sign in -->
     <string name="prompt_user_name">User Name</string>
     <string name="prompt_password">Password</string>
+    <string name="prompt_email">Email</string>
+
+    // Social
     <string name="facebook_app_id">135404106992564</string>
 
     // dialog
@@ -23,6 +26,7 @@
     <string name="action_google_plus">Google +</string>
     <string name="action_android_app">Android</string>
     <string name="action_skip">Skip</string>
+    <string name="action_send">Send</string>
     <string name="action_view_all">View all ></string>
 
     // error
@@ -38,5 +42,11 @@
     // main
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
+
+
+    // forgot pass
+    <string name="forgot_title">Password Recovery</string>
+    <string name="forgot_head">Enter your email and we’ll send
+to you the link to reset the password.</string>
 
 </resources>

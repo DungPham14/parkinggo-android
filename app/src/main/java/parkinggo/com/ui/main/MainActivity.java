@@ -60,6 +60,7 @@ public class MainActivity extends BaseActivityWithDailog implements MainMvpView,
         drawer.setDrawerListener(toggle);
         toggle.syncState();
         getSupportActionBar().setDisplayShowTitleEnabled(false);
+//        navigationView.setItemIconTintList(null);
         navigationView.getMenu().getItem(0).setChecked(true);
         navigationView.setNavigationItemSelectedListener(presenter);
     }
@@ -88,5 +89,14 @@ public class MainActivity extends BaseActivityWithDailog implements MainMvpView,
 
     public void displayToolBar() {
         toolbar.setVisibility(!isHome ? View.VISIBLE : View.GONE);
+    }
+
+    @Override
+    public void onBackPressed() {
+        if(drawer.isDrawerOpen(GravityCompat.START)){
+            drawer.closeDrawer(GravityCompat.START);
+            return;
+        }
+        super.onBackPressed();
     }
 }

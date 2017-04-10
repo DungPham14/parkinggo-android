@@ -1,27 +1,45 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
-
-    <group android:checkableBehavior="single">
+    <group
+        android:id="@+id/group_feature"
+        android:checkableBehavior="single">
         <item
             android:id="@+id/nav_home"
+            android:icon="@drawable/ic_cast_light"
             android:title="Home" />
         <item
             android:id="@+id/nav_profile"
+            android:icon="@drawable/ic_cast_light"
             android:title="Profile" />
         <item
             android:id="@+id/nav_booking"
+            android:icon="@drawable/ic_cast_light"
             android:title="Booking"
             android:visible="false" />
     </group>
-
-    <group android:checkableBehavior="single">
+    <group
+        android:id="@+id/group_settings"
+        android:checkableBehavior="single">
         <item
-            android:id="@+id/nav_term"
-            android:title="Term of use"
-            android:visible="false" />
+            android:id="@+id/nav_settings"
+            android:icon="@drawable/ic_cast_light"
+            android:title="Settings" />
+        <item
+            android:id="@+id/nav_help_feedback"
+            android:icon="@drawable/ic_cast_light"
+            android:title="Feedback" />
+    </group>
 
+    <group
+        android:id="@+id/group_help"
+        android:checkableBehavior="single">
         <item
             android:id="@+id/nav_help"
-            android:title="Help" />
+            android:icon="@drawable/ic_cast_light"
+            android:title="Settings" />
+        <item
+            android:id="@+id/nav_about"
+            android:icon="@drawable/ic_cast_light"
+            android:title="Settings" />
     </group>
 </menu>

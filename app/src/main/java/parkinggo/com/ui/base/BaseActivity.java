@@ -28,21 +28,28 @@ import parkinggo.com.util.Utils;
 
 public abstract class BaseActivity extends AppCompatActivity implements MvpView {
 
-    private ActivityComponent mActivityComponent;
-    private ActivityScopeComponent mActivityScopeComponent;
+    private final String SLIDE_KEY = "slide_key";
 
     protected Unbinder viewUnbind;
     @Inject
     Toast mToast;
+    private ActivityComponent mActivityComponent;
+    private ActivityScopeComponent mActivityScopeComponent;
+    private boolean isSlide = false;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(addContextView());
-        if(bindView()){
+        if (bindView()) {
             viewUnbind = ButterKnife.bind(this);
         }
         ParkingGoApplication.get(this).getComponent().inject(this);
+
+        Bundle bundle = getIntent().getExtras();
+        if (bundle != null) {
+            isSlide = bundle.getBoolean(SLIDE_KEY, false);
+        }
     }
 
     protected abstract boolean bindView();
@@ -94,7 +101,6 @@ public abstract class BaseActivity extends AppCompatActivity implements MvpView 
         return Utils.isConnectivityAvailable(this);
     }
 
-
     @MainThread
     @UiThread
     protected void showMessage(@StringRes int strRes) {
@@ -126,9 +132,26 @@ public abstract class BaseActivity extends AppCompatActivity implements MvpView 
         navigateToActivity(activity, 0);
     }
 
+    protected final void navigateToActivitySlide(Class<? extends Activity> activity) {
+        Bundle bundle = new Bundle();
+        bundle.putBoolean(SLIDE_KEY, true);
+        navigateToActivitySlide(activity, bundle);
+        overridePendingTransition(R.anim.right_out, R.anim.left_in);
+    }
+
     protected final void navigateToActivity(@NonNull Class<? extends Activity> activity,
                                             @Nullable Bundle data) {
         navigateToActivity(activity, data, 0);
+    }
+
+
+    protected final void navigateToActivitySlide(@NonNull Class<? extends Activity> activity,
+                                                 @Nullable Bundle data) {
+        if (data != null && !data.containsKey(SLIDE_KEY)) {
+            data.putBoolean(SLIDE_KEY, true);
+        }
+        navigateToActivity(activity, data, 0);
+        overridePendingTransition(R.anim.right_out, R.anim.left_in);
     }
 
     protected final void navigateToActivity(@NonNull Class<? extends Activity> activity, int flag) {
@@ -156,5 +179,13 @@ public abstract class BaseActivity extends AppCompatActivity implements MvpView 
             intent.putExtras(data);
         }
         startActivityForResult(intent, requestCode);
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        if (isSlide) {
+            overridePendingTransition(R.anim.right_in, R.anim.left_out);
+        }
     }
 }

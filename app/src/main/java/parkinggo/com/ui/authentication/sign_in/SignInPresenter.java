@@ -65,8 +65,10 @@ public class SignInPresenter extends BasePresenter<SignInMvpView> {
                 if (response.getData().getUser() != null) {
                     mDataManager.getDatabaseManager().saveUser(response.getData().getUser());
                 }
+                getMvpView().navigateMainScreen();
+            } else {
+                getMvpView().showAlert(response.getMessage());
             }
-            getMvpView().navigateMainScreen();
         }, throwable -> {
             throwable.printStackTrace();
             getMvpView().dismissProgressDialog();

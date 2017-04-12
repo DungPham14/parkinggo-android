@@ -2,19 +2,23 @@
     <string name="app_name">Parking GO</string>
     <string name="no_img" translatable="false">no image</string>
 
-    <!-- Strings related to sign in -->
+    <!-- User profile -->
     <string name="prompt_user_name">User Name</string>
     <string name="prompt_password">Password</string>
     <string name="prompt_email">Email</string>
+    <string name="prompt_first_name">First name</string>
+    <string name="prompt_last_name">Last name</string>
+    <string name="prompt_phone">Phone number</string>
+    <string name="prompt_pass_confirm">Password confirm</string>
 
-    // Social
+     <!--Social-->
     <string name="facebook_app_id">135404106992564</string>
 
-    // dialog
+    <!--Dialog-->
     <string name="title_dialog">Parking GO</string>
     <string name="waiting_message">Please wait</string>
 
-    // action
+    <!--Action-->
     <string name="action_sign_in">Sign in</string>
     <string name="action_sign_in_short">Sign in</string>
     <string name="action_ok">OK</string>
@@ -29,7 +33,7 @@
     <string name="action_send">Send</string>
     <string name="action_view_all">View all ></string>
 
-    // error
+    <!--Error-->
     <string name="error_invalid_user_name">The user name is invalid</string>
     <string name="error_invalid_email">This email address is invalid</string>
     <string name="error_invalid_password">This password is too short</string>
@@ -39,14 +43,17 @@
     <string name="error_not_connect_to_internet">You are not connect to internet</string>
     <string name="title_activity_main">Map</string>
 
-    // main
+    <!--Main-->
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
 
 
-    // forgot pass
+    <!--Forgot pass-->
     <string name="forgot_title">Password Recovery</string>
-    <string name="forgot_head">Enter your email and we’ll send
-to you the link to reset the password.</string>
+    <string name="forgot_head">Enter your email and we’ll send to you the link to reset the password.</string>
+
+    <!--Sign up-->
+    <string name="sign_up_title">Sign Up</string>
+
 
 </resources>

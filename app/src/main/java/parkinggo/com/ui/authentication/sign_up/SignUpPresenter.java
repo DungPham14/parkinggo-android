@@ -9,11 +9,14 @@ package parkinggo.com.ui.authentication.sign_up;
 import javax.inject.Inject;
 
 import parkinggo.com.data.DataManager;
+import parkinggo.com.data.model.UserConf;
 import parkinggo.com.ui.base.BasePresenter;
 import retrofit2.Retrofit;
 
 
-public class SignUpPresenter extends BasePresenter<SignUpMvpView> {
+public class SignUpPresenter extends BasePresenter<SignUpMvpView>{
+
+    UserConf userConf;
 
     @Inject
     public SignUpPresenter(Retrofit mRetrofit, DataManager mDataManager) {
@@ -33,5 +36,14 @@ public class SignUpPresenter extends BasePresenter<SignUpMvpView> {
     @Override
     public void destroy() {
         super.destroy();
+    }
+
+    public void loadUserType() {
+        getMvpView().showUserType(mDataManager.getDatabaseManager().getUserConfs());
+    }
+
+    public void setUserType(UserConf userConf){
+        this.userConf = userConf;
+        if(userConf.getType() == "");
     }
 }

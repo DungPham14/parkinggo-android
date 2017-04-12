@@ -51,12 +51,13 @@
         </activity>
 
         <activity
-            android:name=".ui.authentication.sign_up.SignUpActivity"
+            android:name=".ui.authentication.sign_in.SignInActivity"
             android:theme="@style/AppTheme.NoActionBar" />
 
         <activity
-            android:name=".ui.authentication.sign_in.SignInActivity"
+            android:name=".ui.authentication.sign_up.SignUpActivity"
             android:theme="@style/AppTheme.NoActionBar" />
+
         <activity
             android:name=".ui.main.MainActivity"
             android:label="@string/title_activity_main"

@@ -18,11 +18,24 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:fitsSystemWindows="true"
-            app:contentScrim="?attr/colorPrimary"
             app:layout_scrollFlags="scroll|exitUntilCollapsed">
 
             <include layout="@layout/toolbar_sub_activity" />
         </android.support.design.widget.CollapsingToolbarLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:background="@color/white"
+            app:layout_scrollFlags="enterAlwaysCollapsed">
+
+            <ImageView
+                android:id="@+id/img_avatar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@mipmap/ic_launcher"/>
+        </LinearLayout>
+
     </android.support.design.widget.AppBarLayout>
 
     <android.support.v4.widget.NestedScrollView
@@ -31,109 +44,124 @@
         android:layout_margin="@dimen/_16sdp"
         android:fitsSystemWindows="false"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical">
-            <android.support.design.widget.TextInputLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/_16sdp">
 
-                <EditText
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+            <android.support.design.widget.TextInputLayout
+                style="@style/TextInputLayout"
+                app:hintTextAppearance="@style/TextLabel">
+
+                <parkinggo.com.ui.widget.ClearTextEditText
+                    android:id="@+id/edt_first_name"
+                    style="@style/EditText"
                     android:drawableLeft="@drawable/ic_person_white_24dp"
-                    android:drawablePadding="@dimen/_4sdp"
-                    android:hint="@string/prompt_user_name"
-                    android:inputType="textEmailAddress"
-                    android:maxLines="1"
-                    android:singleLine="true" />
+                    android:hint="@string/prompt_first_name"
+                    android:inputType="textNoSuggestions"
+                    android:maxLines="1" />
 
             </android.support.design.widget.TextInputLayout>
 
             <android.support.design.widget.TextInputLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/_16sdp">
+                style="@style/TextInputLayout"
+                app:hintTextAppearance="@style/TextLabel">
 
-                <EditText
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                <parkinggo.com.ui.widget.ClearTextEditText
+                    android:id="@+id/edt_last_name"
+                    style="@style/EditText"
                     android:drawableLeft="@drawable/ic_person_white_24dp"
-                    android:drawablePadding="@dimen/_4sdp"
-                    android:hint="@string/prompt_user_name"
-                    android:inputType="textEmailAddress"
-                    android:maxLines="1"
-                    android:singleLine="true" />
-
-            </android.support.design.widget.TextInputLayout>
-            <android.support.design.widget.TextInputLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/_16sdp">
-
-                <EditText
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:drawableLeft="@drawable/ic_person_white_24dp"
-                    android:drawablePadding="@dimen/_4sdp"
-                    android:hint="@string/prompt_user_name"
-                    android:inputType="textEmailAddress"
-                    android:maxLines="1"
-                    android:singleLine="true" />
-
-            </android.support.design.widget.TextInputLayout>
-            <android.support.design.widget.TextInputLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/_16sdp">
-
-                <EditText
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:drawableLeft="@drawable/ic_person_white_24dp"
-                    android:drawablePadding="@dimen/_4sdp"
-                    android:hint="@string/prompt_user_name"
-                    android:inputType="textEmailAddress"
-                    android:maxLines="1"
-                    android:singleLine="true" />
-
-            </android.support.design.widget.TextInputLayout>
-            <android.support.design.widget.TextInputLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/_16sdp">
-
-                <EditText
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:drawableLeft="@drawable/ic_person_white_24dp"
-                    android:drawablePadding="@dimen/_4sdp"
-                    android:hint="@string/prompt_user_name"
-                    android:inputType="textEmailAddress"
-                    android:maxLines="1"
-                    android:singleLine="true" />
+                    android:hint="@string/prompt_last_name"
+                    android:inputType="textNoSuggestions"
+                    android:maxLines="1" />
 
             </android.support.design.widget.TextInputLayout>
 
             <android.support.design.widget.TextInputLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/_16sdp">
+                style="@style/TextInputLayout"
+                app:hintTextAppearance="@style/TextLabel">
 
-                <EditText
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:drawableLeft="@drawable/ic_person_white_24dp"
-                    android:drawablePadding="@dimen/_4sdp"
-                    android:hint="@string/prompt_user_name"
+                <parkinggo.com.ui.widget.ClearTextEditText
+                    android:id="@+id/edt_email"
+                    style="@style/EditText"
+                    android:drawableLeft="@drawable/ic_email_gray_24dp"
+                    android:hint="@string/prompt_email"
                     android:inputType="textEmailAddress"
-                    android:maxLines="1"
-                    android:singleLine="true" />
+                    android:maxLines="1" />
 
             </android.support.design.widget.TextInputLayout>
 
+            <android.support.design.widget.TextInputLayout
+                style="@style/TextInputLayout"
+                app:hintTextAppearance="@style/TextLabel">
+
+                <parkinggo.com.ui.widget.ClearTextEditText
+                    android:id="@+id/edt_phone"
+                    style="@style/EditText"
+                    android:drawableLeft="@drawable/ic_phone_gray_24dp"
+                    android:hint="@string/prompt_phone"
+                    android:inputType="textEmailAddress"
+                    android:maxLines="1" />
+
+            </android.support.design.widget.TextInputLayout>
+
+            <android.support.design.widget.TextInputLayout
+                style="@style/TextInputLayout"
+                app:hintTextAppearance="@style/TextLabel">
+
+                <parkinggo.com.ui.widget.ClearTextEditText
+                    android:id="@+id/edt_password"
+                    style="@style/EditText"
+                    android:drawableLeft="@drawable/ic_lock_gray_24dp"
+                    android:hint="@string/prompt_password"
+                    android:inputType="textPassword"
+                    android:maxLines="1" />
+
+            </android.support.design.widget.TextInputLayout>
+
+            <android.support.design.widget.TextInputLayout
+                style="@style/TextInputLayout"
+                app:hintTextAppearance="@style/TextLabel">
+
+                <parkinggo.com.ui.widget.ClearTextEditText
+                    android:id="@+id/edt_password_confirm"
+                    style="@style/EditText"
+                    android:drawableLeft="@drawable/ic_lock_gray_24dp"
+                    android:hint="@string/prompt_pass_confirm"
+                    android:inputType="textPassword"
+                    android:maxLines="1" />
+
+            </android.support.design.widget.TextInputLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_16sdp"
+                android:background="@drawable/shape_round_corner"
+                android:padding="@dimen/_6sdp">
+
+                <Spinner
+                    android:id="@+id/spinner"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:overlapAnchor="false"
+                    android:spinnerMode="dropdown" />
+            </LinearLayout>
+
+            <Button
+                android:id="@+id/btn_sign_in"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="left"
+                android:layout_marginTop="@dimen/_16sdp"
+                android:layout_weight="1"
+                android:background="@drawable/bg_rounded_button"
+                android:text="@string/action_sign_in"
+                android:textSize="@dimen/_16sdp"
+                android:textAllCaps="true"
+                android:textColor="@color/white"
+                android:textStyle="bold" />
 
         </LinearLayout>
     </android.support.v4.widget.NestedScrollView>

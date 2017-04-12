@@ -10,6 +10,7 @@ import javax.inject.Inject;
 
 import io.realm.Realm;
 import io.realm.RealmList;
+import io.realm.RealmResults;
 import parkinggo.com.data.model.CarTypeConf;
 import parkinggo.com.data.model.CurrencyConf;
 import parkinggo.com.data.model.FeeTypeConf;
@@ -67,12 +68,27 @@ public class DatabaseManager {
         socialConfRepository.saveSocialConf(socialConfs);
     }
 
+    /**
+     * User config
+     */
+
     private void saveUserConf(RealmList<UserConf> userConfs) {
         if (userConfRepository == null) {
             userConfRepository = new UserConfRepository(mRealm);
         }
         userConfRepository.saveUserConf(userConfs);
     }
+
+    public RealmResults<UserConf> getUserConfs(){
+        if (userConfRepository == null) {
+            userConfRepository = new UserConfRepository(mRealm);
+        }
+        return userConfRepository.getUserConfs();
+    }
+
+    /**
+     * End user config
+     */
 
     private void saveSlotConf(RealmList<SlotConf> slotConfs) {
         if (slotConfRepository == null) {

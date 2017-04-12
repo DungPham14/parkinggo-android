@@ -34,8 +34,19 @@
     </style>
 
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
+    <!-- Hint text-->
+    <style name="TextInputLayout" parent="Widget.Design.TextInputLayout">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">@dimen/_54sdp</item>
+        <item name="android:gravity">bottom</item>
+    </style>
+
+    <style name="TextLabel" parent="TextAppearance.Design.Hint">
+        <item name="android:textSize">@dimen/_14sdp</item>
+    </style>
 
     <!-- Custom font -->
 
@@ -52,6 +63,10 @@
     </style>
 
     <style name="EditText">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:background">@drawable/bg_rounded_edittext</item>
+        <item name="android:drawablePadding">@dimen/_4sdp</item>
         <item name="fontPath">@string/kanitLight</item>
     </style>
 

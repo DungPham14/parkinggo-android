@@ -10,6 +10,7 @@ package parkinggo.com.data.realm;
 import io.realm.Realm;
 import io.realm.RealmList;
 import io.realm.RealmQuery;
+import io.realm.RealmResults;
 import parkinggo.com.data.model.UserConf;
 
 public class UserConfRepository extends Repository {
@@ -34,6 +35,20 @@ public class UserConfRepository extends Repository {
             e.printStackTrace();
         }
         return user;
+    }
+
+    public RealmResults<UserConf> getUserConfs() {
+        RealmResults<UserConf> users = null;
+        Realm realm = getRealmInstance();
+        realm.beginTransaction();
+        try {
+            users = getQueryUserConf().findAll();
+            realm.commitTransaction();
+        } catch (Exception e) {
+            realm.cancelTransaction();
+            e.printStackTrace();
+        }
+        return users;
     }
 
     public boolean saveUserConf(RealmList<UserConf> userConfs) {

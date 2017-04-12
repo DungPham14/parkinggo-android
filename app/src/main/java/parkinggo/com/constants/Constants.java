@@ -19,4 +19,9 @@ public interface Constants {
     // message default
     String FAIL_CONNECT_MESSAGE = "Fail to connect to server";
 
+    // User configuration
+
+    String NORMAL_USER ="user";
+
+
 }

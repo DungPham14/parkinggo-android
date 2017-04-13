@@ -11,12 +11,19 @@ import android.location.LocationListener;
 import android.location.LocationProvider;
 import android.os.Bundle;
 
+import com.google.android.gms.maps.model.LatLng;
+
 import javax.inject.Inject;
 
+import parkinggo.com.R;
+import parkinggo.com.constants.Constants;
 import parkinggo.com.data.DataManager;
+import parkinggo.com.data.model.ApiError;
 import parkinggo.com.ui.base.BasePresenter;
 import parkinggo.com.ui.base.MvpView;
 import retrofit2.Retrofit;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
 
 
 public class HomePresenter extends BasePresenter<HomeMvpView> implements LocationListener {
@@ -59,5 +66,31 @@ public class HomePresenter extends BasePresenter<HomeMvpView> implements Locatio
     @Override
     public void onProviderDisabled(String provider) {
 
+    }
+
+    public void getListParkingByLocation(LatLng latLng) {
+        mDataManager.getNetworkManager().getListParkingByLocation(latLng)
+                .subscribeOn(Schedulers.newThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .doOnSubscribe(() -> {
+                    getMvpView().showProgressDialog();
+                }).doOnCompleted(() -> {
+            getMvpView().dismissProgressDialog();
+        }).subscribe(response -> {
+            if (response.getParkings() != null) {
+                getMvpView().makeMarker(response.getParkings());
+            } else {
+                getMvpView().showAlert(response.getMessage());
+            }
+        }, throwable -> {
+            throwable.printStackTrace();
+            getMvpView().dismissProgressDialog();
+            ApiError apiError = getErrorFromHttp(throwable);
+            if (apiError.getCode() == Constants.HTTP_AUTHENTICATION) {
+                getMvpView().showAlert(R.string.error_expire_token);
+            } else {
+                getMvpView().showAlert(apiError.getMessage());
+            }
+        });
     }
 }

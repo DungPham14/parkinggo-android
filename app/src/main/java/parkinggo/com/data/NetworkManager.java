@@ -6,25 +6,23 @@
  */
 package parkinggo.com.data;
 
-import android.net.Uri;
 import android.support.annotation.NonNull;
+
+import com.google.android.gms.maps.model.LatLng;
 
 import java.io.File;
 import java.util.HashMap;
-import java.util.Map;
 
 import javax.inject.Inject;
 
 import okhttp3.MediaType;
-import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 import parkinggo.com.data.model.GlobalConf;
 import parkinggo.com.data.model.LoginResponse;
+import parkinggo.com.data.model.ParkingResponse;
 import parkinggo.com.data.model.SignUpResponse;
 import parkinggo.com.data.model.User;
 import parkinggo.com.data.networking.NetworkService;
-import retrofit2.http.FieldMap;
-import retrofit2.http.Part;
 import rx.Observable;
 
 public class NetworkManager {
@@ -104,5 +102,11 @@ public class NetworkManager {
     public static RequestBody createFileRequestBody(@NonNull File file) {
         return RequestBody.create(
                 MediaType.parse(MULTIPART_FORM_DATA), file);
+    }
+
+    public Observable<ParkingResponse> getListParkingByLocation(LatLng latLng) {
+        String lat = String.valueOf(latLng.latitude);
+        String lng =String.valueOf(latLng.longitude);
+        return networkService.getListParkingByLocation(lat, lng);
     }
 }

@@ -31,6 +31,7 @@
     <string name="action_android_app">Android</string>
     <string name="action_skip">Skip</string>
     <string name="action_send">Send</string>
+    <string name="action_next">Next</string>
     <string name="action_view_all">View all ></string>
 
     <!--Error-->
@@ -41,9 +42,11 @@
     <string name="error_field_required">This field is required</string>
     <string name="error_incorrect_email_password">The email address or password are incorrect!</string>
     <string name="error_not_connect_to_internet">You are not connect to internet</string>
-    <string name="title_activity_main">Map</string>
+    <string name="error_expire_token">Expire token</string>
+    <string name="error_unknown">Unknown error</string>
 
     <!--Main-->
+    <string name="title_activity_main">Map</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
 
@@ -55,5 +58,7 @@
     <!--Sign up-->
     <string name="sign_up_title">Sign Up</string>
 
+    <!-- Dialog -->
+    <string name="photo_dialog_title">Add Photo</string>
 
 </resources>

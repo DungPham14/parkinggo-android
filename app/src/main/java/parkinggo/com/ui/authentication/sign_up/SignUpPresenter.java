@@ -8,13 +8,16 @@ package parkinggo.com.ui.authentication.sign_up;
 
 import javax.inject.Inject;
 
+import parkinggo.com.R;
+import parkinggo.com.constants.Constants;
 import parkinggo.com.data.DataManager;
+import parkinggo.com.data.model.User;
 import parkinggo.com.data.model.UserConf;
 import parkinggo.com.ui.base.BasePresenter;
 import retrofit2.Retrofit;
 
 
-public class SignUpPresenter extends BasePresenter<SignUpMvpView>{
+public class SignUpPresenter extends BasePresenter<SignUpMvpView> {
 
     UserConf userConf;
 
@@ -42,8 +45,23 @@ public class SignUpPresenter extends BasePresenter<SignUpMvpView>{
         getMvpView().showUserType(mDataManager.getDatabaseManager().getUserConfs());
     }
 
-    public void setUserType(UserConf userConf){
+    public void setUserType(UserConf userConf) {
         this.userConf = userConf;
-        if(userConf.getType() == "");
+        int strResourceId = R.string.action_send;
+        if (userConf.getType() == Constants.USER) {
+            strResourceId = R.string.action_send;
+        } else if (userConf.getType().equalsIgnoreCase(Constants.DRIVER)
+                || userConf.getType().equalsIgnoreCase(Constants.RENTER)) {
+            strResourceId = R.string.action_next;
+        }
+        getMvpView().changeButtonText(strResourceId);
+    }
+
+    public void implementSend(User user){
+        if (userConf.getType() == Constants.USER) {
+
+        } else if (userConf.getType().equalsIgnoreCase(Constants.DRIVER)
+                || userConf.getType().equalsIgnoreCase(Constants.RENTER)) {
+        }
     }
 }

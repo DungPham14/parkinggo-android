@@ -9,4 +9,6 @@
 <resources>
     <item name="position_tag" type="id"/>
     <item name="object_tag" type="integer"/>
+    <item name="visible" type="id"/>
+    <item name="masked" type="id"/>
 </resources>

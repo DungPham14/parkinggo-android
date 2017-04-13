@@ -12,25 +12,25 @@ import com.google.gson.FieldAttributes;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
+import java.util.Date;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 import io.realm.annotations.Ignore;
-import okhttp3.MultipartBody;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.logging.HttpLoggingInterceptor;
 import parkinggo.com.BuildConfig;
 import parkinggo.com.constants.Constants;
-import parkinggo.com.data.convert.WrapperDeserializer;
+import parkinggo.com.data.convert.DateTypeDeserializer;
 import parkinggo.com.data.model.GlobalConf;
 import parkinggo.com.data.model.LoginResponse;
+import parkinggo.com.data.model.ParkingResponse;
 import parkinggo.com.data.model.SignUpResponse;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
-import retrofit2.http.Field;
 import retrofit2.http.FieldMap;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
@@ -38,6 +38,7 @@ import retrofit2.http.Multipart;
 import retrofit2.http.POST;
 import retrofit2.http.Part;
 import retrofit2.http.PartMap;
+import retrofit2.http.Query;
 import rx.Observable;
 
 public interface NetworkService {
@@ -56,6 +57,9 @@ public interface NetworkService {
     @Multipart
     @POST("")
     Observable<SignUpResponse> signUpBySocial(@PartMap Map<String, RequestBody> params);
+
+    @GET("parkings")
+    Observable<ParkingResponse> getListParkingByLocation(@Query("lat") String lat, @Query("lng") String lng);
 
     class Creator {
         public static Retrofit newRetrofitInstance() {
@@ -78,9 +82,6 @@ public interface NetworkService {
                 interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
                 okBuilder.addInterceptor(interceptor);
             }
-            Gson internalGson = new GsonBuilder()
-                    .setDateFormat("yyyy-MM-dd HH:mm:ss")
-                    .create();
 
             Gson gson = new GsonBuilder()
                     .addDeserializationExclusionStrategy(new ExclusionStrategy() {
@@ -93,8 +94,8 @@ public interface NetworkService {
                         public boolean shouldSkipClass(Class<?> clazz) {
                             return false;
                         }
-                    }).registerTypeAdapter(LoginResponse.class, new WrapperDeserializer<>(internalGson))
-                    .setDateFormat("yyyy-MM-dd HH:mm:ss")
+                    })
+                    .registerTypeAdapter(Date.class, new DateTypeDeserializer())
                     .create();
 
             return new Retrofit.Builder()

@@ -13,7 +13,7 @@
             android:title="Profile" />
         <item
             android:id="@+id/nav_booking"
-            android:icon="@drawable/ic_cast_light"
+            android:icon="@drawable/ic_booking"
             android:title="Booking"
             android:visible="false" />
     </group>

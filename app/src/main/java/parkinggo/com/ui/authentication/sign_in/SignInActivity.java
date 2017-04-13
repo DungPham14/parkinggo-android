@@ -131,7 +131,6 @@ public class SignInActivity extends BaseActivityWithDailog implements SignInMvpV
                 parameters.putString("fields", "id, email, first_name, last_name, name, gender, birthday");
                 request.setParameters(parameters);
                 request.executeAsync();
-
             }
 
             @Override

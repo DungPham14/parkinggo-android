@@ -41,15 +41,20 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
+import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.util.ArrayList;
 
 import javax.inject.Inject;
 
 import butterknife.OnClick;
+import io.realm.RealmList;
 import parkinggo.com.R;
+import parkinggo.com.data.model.Address;
+import parkinggo.com.data.model.Parking;
 import parkinggo.com.ui.base.BaseFragmentWithDialog;
 import parkinggo.com.ui.main.MainActivity;
 import parkinggo.com.ui.main.interfaces.OnDrawerLayoutListener;
@@ -238,6 +243,10 @@ public class HomeFragment extends BaseFragmentWithDialog implements HomeMvpView,
 
     @Override
     public boolean onMarkerClick(Marker marker) {
+        oldMarker = currentMarker;
+        currentMarker = marker;
+        // TODO show bottomsheet at here.
+        showAlert("latitude = " + marker.getPosition().latitude);
         return false;
     }
 
@@ -254,7 +263,6 @@ public class HomeFragment extends BaseFragmentWithDialog implements HomeMvpView,
         enableMyLocation();
     }
 
-
     /**
      * Enables the My Location layer if the fine location permission has been granted.
      */
@@ -265,7 +273,6 @@ public class HomeFragment extends BaseFragmentWithDialog implements HomeMvpView,
             requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
                     LOCATION_PERMISSION_REQUEST_CODE);
         } else {
-            Log.e("googleMap","googleMap");
             if (googleMap != null) {
                 // Access to the location has been granted to the app.
                 googleMap.setMyLocationEnabled(true);
@@ -288,31 +295,39 @@ public class HomeFragment extends BaseFragmentWithDialog implements HomeMvpView,
         }
     }
 
-    private void showCurrentLocation(){
-        Log.e("showCurrentLocation","showCurrentLocation");
+    private void showCurrentLocation() {
         // moving camera and adding parking list based on current location of device.
         Handler handler = new Handler(Looper.getMainLooper());
         handler.post(new Runnable() {
             @Override
             public void run() {
                 if (location != null) {
-                    Toast.makeText(mActivity, "At Here!", Toast.LENGTH_LONG).show();
                     currentLatLng = new LatLng(location.getLatitude(), location.getLongitude());
                     googleMap.moveCamera(CameraUpdateFactory
                             .newLatLngZoom(currentLatLng, ZOOM_SIZE));
-                    callSearchFromApi(currentLatLng);
+                    presenter.getListParkingByLocation(currentLatLng);
                 }
             }
         });
     }
 
-    /**
-     * Call api for search location
-     *
-     * @param location
-     */
-    private void callSearchFromApi(LatLng location) {
+    @Override
+    public void makeMarker(RealmList<Parking> parkings) {
+        createMarker(parkings);
+    }
 
+    void createMarker(RealmList<Parking> parkings) {
+        if (mActivity == null || parkings == null || parkings.size() == 0) {
+            return;
+        }
+        googleMap.clear();
+        for (Parking parking : parkings) {
+            Address address = parking.getAddress();
+            Marker marker = googleMap.addMarker(new MarkerOptions().position(
+                    new LatLng(address.getLatitude(), address.getLongitude())).icon(
+                    BitmapDescriptorFactory.defaultMarker()));
+            markers.add(marker);
+        }
     }
 
     @Override
@@ -322,7 +337,7 @@ public class HomeFragment extends BaseFragmentWithDialog implements HomeMvpView,
             case LocationSettingsStatusCodes.SUCCESS:
                 // All location settings are satisfied. The client can
                 // initialize location requests here.
-                Log.e("onResult","onResult");
+                Log.e("onResult", "onResult");
                 enableMyLocation();
                 break;
             case LocationSettingsStatusCodes.RESOLUTION_REQUIRED:

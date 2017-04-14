@@ -24,6 +24,7 @@ import android.support.annotation.Nullable;
 import android.support.v13.app.ActivityCompat;
 import android.util.Log;
 import android.view.View;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
@@ -47,6 +48,8 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.inject.Inject;
 
@@ -86,6 +89,10 @@ public class HomeFragment extends BaseFragmentWithDialog implements HomeMvpView,
     @Inject
     HomePresenter presenter;
     OnDrawerLayoutListener onDrawerLayoutListener;
+    /**
+     * Map
+     */
+    View mapView;
     private GoogleMap googleMap = null;
     private GoogleApiClient mGoogleApiClient;
     private LocationManager locationManager;
@@ -94,7 +101,7 @@ public class HomeFragment extends BaseFragmentWithDialog implements HomeMvpView,
     /**
      * List marker will be added on map.
      */
-    private ArrayList<Marker> markers = new ArrayList<>();
+    private Map<Marker, Parking> parkingMap = new HashMap<>();
     /**
      * Keeps track of the selected marker.
      */
@@ -139,7 +146,9 @@ public class HomeFragment extends BaseFragmentWithDialog implements HomeMvpView,
     }
 
     private void initialMap() {
-        ((SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map)).getMapAsync(this);
+        SupportMapFragment mapFragment = ((SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map));
+        mapFragment.getMapAsync(this);
+        mapView = mapFragment.getView();
         mGoogleApiClient = new GoogleApiClient.Builder(getActivity())
                 .addConnectionCallbacks(this)
                 .addOnConnectionFailedListener(this)
@@ -246,7 +255,11 @@ public class HomeFragment extends BaseFragmentWithDialog implements HomeMvpView,
         oldMarker = currentMarker;
         currentMarker = marker;
         // TODO show bottomsheet at here.
-        showAlert("latitude = " + marker.getPosition().latitude);
+
+        Parking parking = parkingMap.get(marker);
+        if (parking != null) {
+            showAlert("parking = " + parking.getName());
+        }
         return false;
     }
 
@@ -263,6 +276,21 @@ public class HomeFragment extends BaseFragmentWithDialog implements HomeMvpView,
         enableMyLocation();
     }
 
+    private void myLocationButton() {
+        if (mapView != null &&
+                mapView.findViewById(Integer.parseInt("1")) != null) {
+            // Get the button view
+            View locationButton = ((View) mapView.findViewById(Integer.parseInt("1")).getParent()).findViewById(Integer.parseInt("2"));
+            // and next place it, on bottom right (as Google Maps app)
+            RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams)
+                    locationButton.getLayoutParams();
+            // position on right bottom
+            layoutParams.addRule(RelativeLayout.ALIGN_PARENT_TOP, 0);
+            layoutParams.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM, RelativeLayout.TRUE);
+            layoutParams.setMargins(0, 0, 30, 300);
+        }
+    }
+
     /**
      * Enables the My Location layer if the fine location permission has been granted.
      */
@@ -276,12 +304,14 @@ public class HomeFragment extends BaseFragmentWithDialog implements HomeMvpView,
             if (googleMap != null) {
                 // Access to the location has been granted to the app.
                 googleMap.setMyLocationEnabled(true);
-                googleMap.getUiSettings().setMyLocationButtonEnabled(false);
+                googleMap.getUiSettings().setMyLocationButtonEnabled(true);
+                myLocationButton();
+                googleMap.getUiSettings().setIndoorLevelPickerEnabled(true);
                 locationManager = (LocationManager) mActivity.getSystemService(Context.LOCATION_SERVICE);
 
                 Criteria criteria = new Criteria();
                 criteria.setPowerRequirement(Criteria.POWER_LOW); // Chose your desired power consumption level.
-                criteria.setAccuracy(Criteria.ACCURACY_FINE); // Choose your accuracy requirement.
+                criteria.setAccuracy(Criteria.ACCURACY_COARSE); // Choose your accuracy requirement.
                 criteria.setSpeedRequired(true); // Chose if speed for first location fix is required.
                 criteria.setAltitudeRequired(false); // Choose if you use altitude.
                 criteria.setBearingRequired(false); // Choose if you use bearing.
@@ -321,12 +351,13 @@ public class HomeFragment extends BaseFragmentWithDialog implements HomeMvpView,
             return;
         }
         googleMap.clear();
+        parkingMap.clear();
         for (Parking parking : parkings) {
             Address address = parking.getAddress();
             Marker marker = googleMap.addMarker(new MarkerOptions().position(
                     new LatLng(address.getLatitude(), address.getLongitude())).icon(
                     BitmapDescriptorFactory.defaultMarker()));
-            markers.add(marker);
+            parkingMap.put(marker, parking);
         }
     }
 

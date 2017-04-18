@@ -50,6 +50,26 @@
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
 
+     <!-- Menu -->
+
+    <!-- Test -->
+    <string name="test">
+        Usage of expanded and collapsed Bottom sheets in Android
+There are 3 states of Bottom sheets :-
+
+Expanded — When the sheet is completely visible.
+Collapsed — When the sheet is partially visible.
+Hidden — When the sheet is completely hidden.
+Step 1 is we need to import the latest design support library. Put this line in your app level build.gradle file.
+compile ‘com.android.support:design:23.2.0’
+Then one should create a new Blank Activity (not Empty Activity) in Android Studio. It sets up the CoordinatorLayout by default.
+So now there ate two layouts created by default namely activity_main.xml and content_main.xml.
+        Those who aren’t familiar with the coordinator layout — basically
+        there is a base level layout activity_main which contains the FloatingButton and within
+        this layout including content_main.xml which will contain the rest of the layout.
+        Notice that one also has to include bottomsheet_main.xml.
+        This layout contains our bottom sheet layout which will be created next.
+    </string>
 
     <!--Forgot pass-->
     <string name="forgot_title">Password Recovery</string>

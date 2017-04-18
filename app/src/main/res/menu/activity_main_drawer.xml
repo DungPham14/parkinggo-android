@@ -36,10 +36,10 @@
         <item
             android:id="@+id/nav_help"
             android:icon="@drawable/ic_help_gray_24dp"
-            android:title="Settings" />
+            android:title="Help" />
         <item
             android:id="@+id/nav_about"
             android:icon="@drawable/ic_cast_light"
-            android:title="Settings" />
+            android:title="About" />
     </group>
 </menu>

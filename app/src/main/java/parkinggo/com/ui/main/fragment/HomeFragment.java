@@ -9,6 +9,7 @@ package parkinggo.com.ui.main.fragment;
 import android.Manifest;
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.content.IntentSender;
 import android.content.pm.PackageManager;
 import android.location.Criteria;
@@ -16,15 +17,20 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.location.LocationProvider;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.BottomSheetBehavior;
 import android.support.v13.app.ActivityCompat;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
@@ -49,10 +55,12 @@ import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 
 import javax.inject.Inject;
 
+import butterknife.BindView;
 import butterknife.OnClick;
 import io.realm.RealmList;
 import parkinggo.com.R;
@@ -90,14 +98,26 @@ public class HomeFragment extends BaseFragmentWithDialog implements HomeMvpView,
     HomePresenter presenter;
     OnDrawerLayoutListener onDrawerLayoutListener;
     /**
-     * Map
+     * View
      */
     View mapView;
+    @BindView(R.id.bottom_sheet)
+    View bottomSheet;
+    @BindView(R.id.fab)
+    View fab;
+    @BindView(R.id.toolbar_expand)
+    Toolbar toolbar;
+    @BindView(R.id.parking_title)
+    TextView tvTitle;
+    /**
+     * Map
+     */
     private GoogleMap googleMap = null;
     private GoogleApiClient mGoogleApiClient;
     private LocationManager locationManager;
     private Location location;
     private LatLng currentLatLng;
+    private LatLng selectLatLng;
     /**
      * List marker will be added on map.
      */
@@ -108,6 +128,7 @@ public class HomeFragment extends BaseFragmentWithDialog implements HomeMvpView,
     private Marker currentMarker;
     private Marker oldMarker;
     private boolean permissionDenied = false;
+    private BottomSheetBehavior bottomSheetBehavior;
 
     public static HomeFragment getInstance() {
         HomeFragment homeFragment = new HomeFragment();
@@ -158,6 +179,7 @@ public class HomeFragment extends BaseFragmentWithDialog implements HomeMvpView,
                 .enableAutoManage(getActivity(), 1, this)
                 .build();
         initialLocationRequest();
+        initBottomSheet();
     }
 
     private void initialLocationRequest() {
@@ -167,16 +189,43 @@ public class HomeFragment extends BaseFragmentWithDialog implements HomeMvpView,
         locationRequest.setFastestInterval(FASTEST_INTERVAL);
     }
 
-    private void initialPendingLocation() {
-        LocationSettingsRequest.Builder builder = new LocationSettingsRequest.Builder()
-                .addLocationRequest(locationRequest);
-        builder.setAlwaysShow(true);
-        PendingResult<LocationSettingsResult> result =
-                LocationServices.SettingsApi.checkLocationSettings(
-                        mGoogleApiClient,
-                        builder.build()
-                );
-        result.setResultCallback(this);
+    private void initBottomSheet() {
+        bottomSheetBehavior = BottomSheetBehavior.from(bottomSheet);
+        //Handling movement of bottom sheets from sliding
+        bottomSheetBehavior.setBottomSheetCallback(new BottomSheetBehavior.BottomSheetCallback() {
+            @Override
+            public void onStateChanged(View bottomSheet, int newState) {
+                if (newState == BottomSheetBehavior.STATE_EXPANDED) {
+                    fab.setVisibility(View.VISIBLE);
+                    toolbar.setNavigationIcon(R.drawable.ic_close_white_24dp);
+                } else if (newState == BottomSheetBehavior.STATE_HIDDEN) {
+                    fab.setVisibility(View.GONE);
+                } else {
+                    fab.setVisibility(View.VISIBLE);
+                    toolbar.setNavigationIcon(R.color.toolbarTransparent);
+                }
+            }
+
+            @Override
+            public void onSlide(View bottomSheet, float slideOffset) {
+            }
+        });
+        initialToolbar();
+    }
+
+    private void initialToolbar() {
+        mActivity.setSupportActionBar(toolbar);
+        mActivity.getSupportActionBar().setDisplayShowTitleEnabled(false);
+        mActivity.getSupportActionBar().setTitle("");
+        mActivity.getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        mActivity.getSupportActionBar().setDisplayShowHomeEnabled(true);
+        tvTitle.setText(getString(R.string.forgot_title));
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+            }
+        });
     }
 
     /**
@@ -187,14 +236,30 @@ public class HomeFragment extends BaseFragmentWithDialog implements HomeMvpView,
                 .newInstance(true).show(mActivity.getSupportFragmentManager(), "dialog");
     }
 
-
-    @OnClick({R.id.img_menu})
+    @OnClick({R.id.img_menu, R.id.fab})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.img_menu:
                 Utils.hideKeyboardMachine(mActivity);
                 if (onDrawerLayoutListener != null) {
                     onDrawerLayoutListener.onMenuClickListener();
+                }
+                break;
+            case R.id.fab:
+                if (selectLatLng != null && currentLatLng != null) {
+                    String address = String.format("http://maps.google.com/maps?saddr=%f,%f&daddr=%f,%f",
+                            currentLatLng.latitude, currentLatLng.longitude, selectLatLng.latitude, selectLatLng.longitude);
+                    Uri gmmIntentUri = Uri.parse(address);
+                    Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
+                    mapIntent.setPackage("com.google.android.apps.maps");
+                    startActivity(mapIntent);
+                    PackageManager packageManager = getActivity().getPackageManager();
+
+                    if (mapIntent.resolveActivity(packageManager) != null) {
+                        startActivity(mapIntent);
+                    } else {
+                        Log.d("Start Map", "No Intent available to handle action");
+                    }
                 }
                 break;
             default:
@@ -218,6 +283,18 @@ public class HomeFragment extends BaseFragmentWithDialog implements HomeMvpView,
             showMissingPermissionError();
             permissionDenied = false;
         }
+    }
+
+    private void initialPendingLocation() {
+        LocationSettingsRequest.Builder builder = new LocationSettingsRequest.Builder()
+                .addLocationRequest(locationRequest);
+        builder.setAlwaysShow(true);
+        PendingResult<LocationSettingsResult> result =
+                LocationServices.SettingsApi.checkLocationSettings(
+                        mGoogleApiClient,
+                        builder.build()
+                );
+        result.setResultCallback(this);
     }
 
     @Override
@@ -254,11 +331,14 @@ public class HomeFragment extends BaseFragmentWithDialog implements HomeMvpView,
     public boolean onMarkerClick(Marker marker) {
         oldMarker = currentMarker;
         currentMarker = marker;
-        // TODO show bottomsheet at here.
-
         Parking parking = parkingMap.get(marker);
         if (parking != null) {
-            showAlert("parking = " + parking.getName());
+            selectLatLng = new LatLng(parking.getAddress().getLatitude(), parking.getAddress().getLongitude());
+            bottomSheetBehavior.setPeekHeight(400);
+            toolbar.setNavigationIcon(R.color.toolbarTransparent);
+            tvTitle.setText(parking.getName());
+            fab.setVisibility(View.VISIBLE);
+            bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
         }
         return false;
     }

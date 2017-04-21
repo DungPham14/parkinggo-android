@@ -14,9 +14,7 @@ import android.content.IntentSender;
 import android.content.pm.PackageManager;
 import android.location.Criteria;
 import android.location.Location;
-import android.location.LocationListener;
 import android.location.LocationManager;
-import android.location.LocationProvider;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
@@ -28,10 +26,8 @@ import android.support.v13.app.ActivityCompat;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
-import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -53,9 +49,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Locale;
 import java.util.Map;
 
 import javax.inject.Inject;
@@ -81,7 +75,7 @@ public class HomeFragment extends BaseFragmentWithDialog implements HomeMvpView,
         OnMapReadyCallback, ActivityCompat.OnRequestPermissionsResultCallback,
         GoogleMap.OnMarkerClickListener, GoogleMap.OnMapClickListener {
 
-    private static final int ZOOM_SIZE = 16;
+    private static final int ZOOM_SIZE = 14;
     /**
      * Request code for location permission request.
      *
@@ -115,7 +109,7 @@ public class HomeFragment extends BaseFragmentWithDialog implements HomeMvpView,
     private GoogleMap googleMap = null;
     private GoogleApiClient mGoogleApiClient;
     private LocationManager locationManager;
-    private Location location;
+    //    private Location location;
     private LatLng currentLatLng;
     private LatLng selectLatLng;
     /**
@@ -190,19 +184,28 @@ public class HomeFragment extends BaseFragmentWithDialog implements HomeMvpView,
     }
 
     private void initBottomSheet() {
+        fab.setVisibility(View.GONE);
         bottomSheetBehavior = BottomSheetBehavior.from(bottomSheet);
-        //Handling movement of bottom sheets from sliding
+        bottomSheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
         bottomSheetBehavior.setBottomSheetCallback(new BottomSheetBehavior.BottomSheetCallback() {
             @Override
             public void onStateChanged(View bottomSheet, int newState) {
-                if (newState == BottomSheetBehavior.STATE_EXPANDED) {
-                    fab.setVisibility(View.VISIBLE);
-                    toolbar.setNavigationIcon(R.drawable.ic_close_white_24dp);
-                } else if (newState == BottomSheetBehavior.STATE_HIDDEN) {
-                    fab.setVisibility(View.GONE);
-                } else {
-                    fab.setVisibility(View.VISIBLE);
-                    toolbar.setNavigationIcon(R.color.toolbarTransparent);
+                switch (newState) {
+                    case BottomSheetBehavior.STATE_DRAGGING:
+                    case BottomSheetBehavior.STATE_COLLAPSED:
+                        fab.setVisibility(View.VISIBLE);
+                        toolbar.setNavigationIcon(R.color.toolbarTransparent);
+                        break;
+                    case BottomSheetBehavior.STATE_HIDDEN:
+                        fab.setVisibility(View.GONE);
+                        toolbar.setNavigationIcon(R.color.toolbarTransparent);
+                        break;
+                    case BottomSheetBehavior.STATE_EXPANDED:
+                        fab.setVisibility(View.VISIBLE);
+                        toolbar.setNavigationIcon(R.drawable.ic_close_white_24dp);
+                        break;
+                    default:
+                        break;
                 }
             }
 
@@ -295,6 +298,7 @@ public class HomeFragment extends BaseFragmentWithDialog implements HomeMvpView,
                         builder.build()
                 );
         result.setResultCallback(this);
+
     }
 
     @Override
@@ -329,8 +333,21 @@ public class HomeFragment extends BaseFragmentWithDialog implements HomeMvpView,
 
     @Override
     public boolean onMarkerClick(Marker marker) {
-        oldMarker = currentMarker;
         currentMarker = marker;
+        if (bottomSheetBehavior.getState() == BottomSheetBehavior.STATE_HIDDEN) {
+            showParking(marker);
+        } else {
+            if (oldMarker == currentMarker) {
+                bottomSheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
+            } else {
+                showParking(marker);
+            }
+        }
+        oldMarker = currentMarker;
+        return false;
+    }
+
+    private void showParking(Marker marker) {
         Parking parking = parkingMap.get(marker);
         if (parking != null) {
             selectLatLng = new LatLng(parking.getAddress().getLatitude(), parking.getAddress().getLongitude());
@@ -340,13 +357,11 @@ public class HomeFragment extends BaseFragmentWithDialog implements HomeMvpView,
             fab.setVisibility(View.VISIBLE);
             bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
         }
-        return false;
     }
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
         this.googleMap = googleMap;
-
         googleMap.setOnMarkerClickListener(this);
         googleMap.setOnMapClickListener(this);
 
@@ -381,41 +396,35 @@ public class HomeFragment extends BaseFragmentWithDialog implements HomeMvpView,
             requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
                     LOCATION_PERMISSION_REQUEST_CODE);
         } else {
-            if (googleMap != null) {
-                // Access to the location has been granted to the app.
+            // Access to the location has been granted to the app.
+            if (googleMap != null && currentLatLng == null) {
                 googleMap.setMyLocationEnabled(true);
                 googleMap.getUiSettings().setMyLocationButtonEnabled(true);
                 myLocationButton();
                 googleMap.getUiSettings().setIndoorLevelPickerEnabled(true);
                 locationManager = (LocationManager) mActivity.getSystemService(Context.LOCATION_SERVICE);
-
-                Criteria criteria = new Criteria();
-                criteria.setPowerRequirement(Criteria.POWER_LOW); // Chose your desired power consumption level.
-                criteria.setAccuracy(Criteria.ACCURACY_COARSE); // Choose your accuracy requirement.
-                criteria.setSpeedRequired(true); // Chose if speed for first location fix is required.
-                criteria.setAltitudeRequired(false); // Choose if you use altitude.
-                criteria.setBearingRequired(false); // Choose if you use bearing.
-                criteria.setCostAllowed(false); // Choose if this provider can waste money :-)
-                String provider = locationManager.getBestProvider(criteria, true);
                 locationManager.requestLocationUpdates(
                         LocationManager.NETWORK_PROVIDER, UPDATE_LOCATION_INTERVAL, UPDATE_LOCATION_DISTANCE, presenter);
-                location = locationManager.getLastKnownLocation(provider);
-                showCurrentLocation();
+                Location lastLocation = LocationServices.FusedLocationApi.getLastLocation(
+                        mGoogleApiClient);
+                if (lastLocation != null) {
+                    currentLatLng = new LatLng(lastLocation.getLatitude(), lastLocation.getLongitude());
+                    searchParkingByLocation(currentLatLng);
+                }
             }
         }
     }
 
-    private void showCurrentLocation() {
+    private void searchParkingByLocation(LatLng latLng) {
         // moving camera and adding parking list based on current location of device.
         Handler handler = new Handler(Looper.getMainLooper());
         handler.post(new Runnable() {
             @Override
             public void run() {
-                if (location != null) {
-                    currentLatLng = new LatLng(location.getLatitude(), location.getLongitude());
+                if (latLng != null) {
                     googleMap.moveCamera(CameraUpdateFactory
-                            .newLatLngZoom(currentLatLng, ZOOM_SIZE));
-                    presenter.getListParkingByLocation(currentLatLng);
+                            .newLatLngZoom(latLng, ZOOM_SIZE));
+                    presenter.getListParkingByLocation(latLng);
                 }
             }
         });
@@ -446,13 +455,9 @@ public class HomeFragment extends BaseFragmentWithDialog implements HomeMvpView,
         final Status status = locationSettingsResult.getStatus();
         switch (status.getStatusCode()) {
             case LocationSettingsStatusCodes.SUCCESS:
-                // All location settings are satisfied. The client can
-                // initialize location requests here.
-                Log.e("onResult", "onResult");
                 enableMyLocation();
                 break;
             case LocationSettingsStatusCodes.RESOLUTION_REQUIRED:
-                //  Location settings are not satisfied. Show the user a dialog
                 try {
                     status.startResolutionForResult(mActivity, REQUEST_CHECK_SETTINGS);
                 } catch (IntentSender.SendIntentException e) {
@@ -474,14 +479,9 @@ public class HomeFragment extends BaseFragmentWithDialog implements HomeMvpView,
     }
 
     @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        presenter.destroyView();
-    }
-
-    @Override
     public void onDestroy() {
         super.onDestroy();
+        presenter.destroyView();
         if (mGoogleApiClient != null) {
             mGoogleApiClient.stopAutoManage(getActivity());
             mGoogleApiClient.disconnect();

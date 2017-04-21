@@ -14,4 +14,6 @@ public interface MainMvpView extends BaseScreenMvpView {
 
     void navigateHome();
 
+    void navigateSignIn();
+
 }

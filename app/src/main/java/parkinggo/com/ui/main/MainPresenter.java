@@ -40,6 +40,9 @@ public class MainPresenter extends BasePresenter<MainMvpView> implements
             case R.id.nav_home:
                 getMvpView().navigateHome();
                 break;
+            case R.id.nav_about:
+                getMvpView().navigateSignIn();
+                break;
             default:
                 break;
         }

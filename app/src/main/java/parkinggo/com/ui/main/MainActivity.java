@@ -15,6 +15,7 @@ import javax.inject.Inject;
 
 import butterknife.BindView;
 import parkinggo.com.R;
+import parkinggo.com.ui.authentication.sign_in.SignInActivity;
 import parkinggo.com.ui.base.BaseActivityWithDailog;
 import parkinggo.com.ui.main.fragment.HomeFragment;
 import parkinggo.com.ui.main.interfaces.OnDrawerLayoutListener;
@@ -74,6 +75,12 @@ public class MainActivity extends BaseActivityWithDailog implements MainMvpView,
     @Override
     public void navigateHome() {
         addHomeFragment();
+    }
+
+    @Override
+    public void navigateSignIn() {
+        navigateToActivity(SignInActivity.class);
+        finish();
     }
 
     private void addHomeFragment() {
